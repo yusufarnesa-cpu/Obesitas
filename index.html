@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Medical Study Companion | Blok Endokrin - Obesitas pada Anak & Remaja (IDAI)</title>
+    <!-- Google Fonts & Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        medical: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .smooth-scroll { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-track { background: #1e293b; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 smooth-scroll transition-colors duration-300">
+
+    <!-- Sticky Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="bg-medical-600 text-white p-2 rounded-xl font-bold text-lg shadow-md">🩺</span>
+                <div>
+                    <h1 class="text-sm font-bold tracking-tight text-slate-900 dark:text-white">MED-COMPANION <span class="text-medical-600">ENDOCRINE</span></h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Blok Endokrin & Metabolik - Obesitas pada Anak & Remaja (IDAI / SKDI)</p>
+                </div>
+            </div>
+
+            <!-- Search Bar & Progress -->
+            <div class="flex items-center space-x-4 flex-1 max-w-md mx-auto">
+                <div class="relative w-full">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Cari materi, definisi, kurva WHO/CDC, komorbiditas, tatalaksana..." class="w-full pl-10 pr-4 py-1.5 text-sm bg-slate-100 dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-lg focus:outline-none focus:border-medical-500 dark:text-white placeholder-slate-400">
+                </div>
+            </div>
+
+            <!-- Controls (Theme & Progress Indicator) -->
+            <div class="flex items-center space-x-3">
+                <div class="hidden md:block text-xs font-medium text-slate-600 dark:text-slate-300">
+                    Progress: <span id="progressText" class="font-bold text-medical-600">0%</span>
+                </div>
+                <button onclick="toggleDarkMode()" id="themeToggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+                    Mode
+                </button>
+            </div>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-1">
+            <div id="progressBar" class="bg-medical-600 h-1 w-0 transition-all duration-300"></div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="hidden lg:block lg:col-span-1 space-y-6">
+            <div class="sticky top-24 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Daftar Isi Materi</h3>
+                <nav class="space-y-1 text-sm">
+                    <a href="#overview" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">1. Definisi & SKDI Mapping</a>
+                    <a href="#etiology" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">2. Etiologi & Faktor Risiko</a>
+                    <a href="#pathophysiology" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">3. Patofisiologi & Keseimbangan Energi</a>
+                    <a href="#manifestations" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">4. Manifestasi Klinik & Anamnesis</a>
+                    <a href="#diagnosis" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">5. Diagnosis & Antropometri IDAI</a>
+                    <a href="#comorbidities" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">6. Komorbiditas & Komplikasi</a>
+                    <a href="#management" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">7. Tatalaksana & Traffic Light Diet</a>
+                    <a href="#quiz-section" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">8. Latihan 10 Soal Ujian</a>
+                    <a href="#quick-review" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">9. Quick Review (5 Menit)</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="lg:col-span-3 space-y-8 searchable-content">
+
+            <!-- 1. DEFINISI & SKDI MAPPING -->
+            <section id="overview" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <span class="bg-medical-100 text-medical-800 dark:bg-medical-900/50 dark:text-medical-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Topik Pediatrik Endokrin & Metabolik</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mt-2">Obesitas pada Anak dan Remaja</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Dosen Pengampu: Restu Triwulandani Tolibin, M.Sc., Sp.A | Fakultas Kedokteran UMS</p>
+                    </div>
+                    <div class="bg-slate-100 dark:bg-slate-700/50 p-4 rounded-xl text-right">
+                        <span class="text-xs text-slate-500 dark:text-slate-400 block">Status SKDI 2026</span>
+                        <span class="text-sm font-bold text-medical-600">🎯 TINGKAT KOMPETENSI 4A (TUNTAS)</span>
+                    </div>
+                </div>
+
+                <!-- Learning Objectives Checklist -->
+                <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-100 dark:border-slate-700">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3">Target Pembelajaran (Checklist Belajar):</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" class="rounded text-medical-600 focus:ring-medical-500"> <span>Memahami definisi klinis dan antropometri obesitas anak (WHO vs CDC)</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" class="rounded text-medical-600 focus:ring-medical-500"> <span>Menguasai cara pembacaan grafik pertumbuhan berdasarkan kelompok usia</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" class="rounded text-medical-600 focus:ring-medical-500"> <span>Mengidentifikasi komorbiditas sistemik (NAFLD, OSA, Hipertensi, T2DM)</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" class="rounded text-medical-600 focus:ring-medical-500"> <span>Menerapkan perhitungan kalori, traffic light diet, dan tatalaksana komprehensif</span></label>
+                    </div>
+                </div>
+
+                <!-- Definisi & Epidemiologi Core Theory -->
+                <div class="space-y-4">
+                    <div class="border-l-4 border-medical-500 bg-medical-50/50 dark:bg-slate-700/20 p-5 rounded-r-xl space-y-2">
+                        <h4 class="font-bold text-medical-800 dark:text-medical-400">1. Definisi & Epidemiologi</h4>
+                        <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                            Obesitas didefinisikan sebagai ketidakseimbangan antara asupan energi dengan keluaran energi (<i>energy expenditure</i>), sehingga terjadi kelebihan energi yang selanjutnya disimpan dalam bentuk jaringan lemak. Berdasarkan laporan global dan regional, masalah kelebihan berat badan dan obesitas anak merupakan bagian dari beban ganda malnutrisi (<i>triple burden of malnutrition</i>) yang berdampak serius terhadap kesehatan jangka panjang.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. ETIOLOGI & FAKTOR RISIKO -->
+            <section id="etiology" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-medical-600 font-bold text-xs uppercase tracking-wider">Etiology & Risk Factors</span>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Etiologi: Obesitas Idiopatik vs Obesitas Endogen</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 dark:text-slate-300">
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400">🟢 Obesitas Idiopatik (Eksogen) (>90% Kasus)</h4>
+                        <ul class="list-disc pl-4 text-xs space-y-2">
+                            <li><b>Faktor Utama:</b> Pola makan tinggi kalori dan gaya hidup kurang gerak (<i>sedentary lifestyle</i>).</li>
+                            <li><b>Karakteristik Fisik:</b> Perawakan tinggi (umumnya TB/U > Persentil 50).</li>
+                            <li><b>Riwayat Keluarga:</b> Positif didapatkan riwayat obesitas pada keluarga (faktor genetik/lingkungan).</li>
+                            <li><b>Fungsi Mental & Usia Tulang:</b> Fungsi mental normal dan usia tulang normal atau maju (<i>advanced</i>).</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400">🔴 Obesitas Endogen / Sindrom (<10% Kasus)</h4>
+                        <ul class="list-disc pl-4 text-xs space-y-2">
+                            <li><b>Penyebab:</b> Kelainan endokrin (Sindrom Cushing, hipotiroid) atau sindrom genetik (Prader-Willi, dll).</li>
+                            <li><b>Karakteristik Fisik:</b> Perawakan pendek (TB/U < Persentil 5 atau di bawah normal).</li>
+                            <li><b>Riwayat Keluarga:</b> Umumnya tidak didapatkan riwayat obesitas khas keluarga.</li>
+                            <li><b>Fungsi Mental & Usia Tulang:</b> Fungsi mental sering mengalami retardasi/gangguan belajar dan usia tulang terlambat (<i>delayed bone age</i>).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. PATOFISIOLOGI & KESEIMBANGAN ENERGI -->
+            <section id="pathophysiology" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-medical-600 font-bold text-xs uppercase tracking-wider">Pathomechanism</span>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Patofisiologi & Adiposity Rebound</h3>
+                </div>
+
+                <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400 text-base">🔄 Mekanisme Kritis & Fenomena Adiposity Rebound</h4>
+                        <ol class="list-decimal pl-4 text-xs space-y-2">
+                            <li><b>Ketidakseimbangan Energi:</b> Asupan kalori harian yang masuk melebihi total energi yang dikeluarkan (aktivitas fisis, metabolisme basal, efek termik makanan).</li>
+                            <li><b>Akumulasi Jaringan Adiposa:</b> Kelebihan kalori dikonversi menjadi trigliserida dan disimpan dalam sel-sel lemak (hipertrofi dan hiperplasia adiposit).</li>
+                            <li><b>Konsep Adiposity Rebound:</b> Pada anak normal, IMT mencapai titik terendah sekitar usia 5-6 tahun sebelum naik kembali. Jika titik terendah ini terjadi lebih dini dan cepat (<b>early adiposity rebound</b> sebelum usia 5 tahun), hal ini merupakan periode kritis yang sangat meningkatkan risiko obesitas sentral dan sindrom metabolik di masa dewasa.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. MANIFESTASI KLINIK & ANAMNESIS -->
+            <section id="manifestations" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-medical-600 font-bold text-xs uppercase tracking-wider">Clinical Manifestations</span>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Manifestasi Klinik & Anamnesis Terarah</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 dark:text-slate-300">
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400">📝 Anamnesis Kunci</h4>
+                        <ul class="list-disc pl-4 text-xs space-y-2">
+                            <li><b>Periode Awitan:</b> Kapan mulai timbulnya obesitas (sejak bayi/prenatal atau masa remaja).</li>
+                            <li><b>Pola Makan:</b> Kebiasaan makan, kepatuhan terhadap aturan makan (<i>food rules</i>), perilaku abnormal terkait makanan.</li>
+                            <li><b>Aktivitas Fisis:</b> Frekuensi per minggu, durasi per hari, jenis kegiatan terstruktur maupun tidak terstruktur.</li>
+                            <li><b>Riwayat Keluarga:</b> Obesitas keluarga, NIDDM, penyakit kardiovaskular dini (<55 tahun), hipertensi, dislipidemia.</li>
+                            <li><b>Gejala Komorbid:</b> Mengorok saat tidur, sering terbangun malam hari (kecurigaan OSA), menstruasi dini atau nyeri panggul.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400">🔍 Tanda Fisik Khas</h4>
+                        <ul class="list-disc pl-4 text-xs space-y-2">
+                            <li><b>Kepala & Leher:</b> Wajah membulat (<i>moon facies</i>), pipi tembem, dagu rangkap, leher relatif pendek.</li>
+                            <li><b>Dada & Abdomen:</b> Dada membusung dengan payudara tampak membesar, perut membuncit dengan lipatan kulit berlapis.</li>
+                            <li><b>Genitalia:</b> Penis tampak kecil karena terpendam dalam lemak suprapubik (<i>buried penis</i>).</li>
+                            <li><b>Ekstremitas:</b> Tungkai umumnya berbentuk X (valgus), serta risiko <i>Blount disease</i> atau <i>Slipped Capital Femoral Epiphysis</i> (SCFE).</li>
+                            <li><b>Kulit:</b> Akantosis nigrikans (leher dan lipatan kulit tampak gelap akibat resistensi insulin).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. DIAGNOSIS & ANTROPOMETRI IDAI -->
+            <section id="diagnosis" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-medical-600 font-bold text-xs uppercase tracking-wider">Diagnosis & Criteria</span>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Kriteria Diagnosis & Grafik Pertumbuhan IDAI (WHO 2006 vs CDC 2000)</h3>
+                </div>
+
+                <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400 text-base">📊 Panduan Baku Penilaian Status Gizi Anak</h4>
+                        <p class="text-xs leading-relaxed">
+                            Berdasarkan Rekomendasi IDAI (2014), penentuan status gizi dibedakan berdasarkan kelompok usia pasien:
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-2">
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700 space-y-1">
+                                <span class="font-bold text-medical-700 dark:text-medical-400 block">Usia 0 - 2 Tahun (Grafik WHO 2006)</span>
+                                <p>Menggunakan parameter Berat Badan menurut Tinggi Badan (BB/TB):</p>
+                                <ul class="list-disc pl-4 space-y-1 pt-1">
+                                    <li><b>Obesitas:</b> BB/TB > +3 SD (atau > 120% dari median)</li>
+                                    <li><b>Overweight (Gizi Lebih):</b> BB/TB > +2 SD hingga +3 SD (atau > 110%)</li>
+                                    <li><b>Normal:</b> BB/TB +2 SD hingga -2 SD</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700 space-y-1">
+                                <span class="font-bold text-medical-700 dark:text-medical-400 block">Usia > 2 - 18 Tahun (Grafik IMT CDC 2000)</span>
+                                <p>Menggunakan parameter Indeks Massa Tubuh menurut Umur (IMT/U):</p>
+                                <ul class="list-disc pl-4 space-y-1 pt-1">
+                                    <li><b>Obesitas:</b> IMT > Persentil 95 (P95)</li>
+                                    <li><b>Overweight (Gizi Lebih):</b> IMT Persentil 85 hingga 95 (P85 - P95)</li>
+                                    <li><b>Normal:</b> Persentil 5 hingga < 85</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. KOMORBIDITAS & KOMPLIKASI -->
+            <section id="comorbidities" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-medical-600 font-bold text-xs uppercase tracking-wider">Comorbidities & Complications</span>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Komorbiditas Sistemik Obesitas pada Anak</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 dark:text-slate-300">
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400">🫁 Respirasi & Metabolik</h4>
+                        <ul class="list-disc pl-4 text-xs space-y-1.5">
+                            <li><b>Obstructive Sleep Apnea (OSA):</b> Ditandai mengorok keras, henti napas saat tidur, sering terbangun, dan mengantuk di siang hari akibat hipertrofi tonsil.</li>
+                            <li><b>Nonalcoholic Fatty Liver Disease (NAFLD):</b> Seringkali tanpa gejala awal, dapat ditemukan peningkatan ALT/AST atau hepatomegali ringan pada USG.</li>
+                            <li><b>Diabetes Melitus Tipe 2:</b> Dipicu oleh resistensi insulin berat, polidipsi, poliuria, atau ditemukan akantosis nigrikans.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400">❤️ Kardiovaskular & Muskuloskeletal</h4>
+                        <ul class="list-disc pl-4 text-xs space-y-1.5">
+                            <li><b>Hipertensi:</b> Tekanan darah sistolik atau diastolik > Persentil 95 berdasarkan usia, jenis kelamin, dan tinggi badan pada minimal 3 kali pemeriksaan.</li>
+                            <li><b>Dislipidemia:</b> Profil lipid abnormal (peningkatan trigliserida dan penurunan HDL).</li>
+                            <li><b>Ortopedi:</b> Blount disease (tibia vara/kaki bengkok) dan Slipped Capital Femoral Epiphysis (SCFE) akibat beban berlebih pada lempeng epifisis panggul.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. TATALAKSANA & TRAFFIC LIGHT DIET -->
+            <section id="management" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Management & Protocol (IDAI)</span>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-2">Tatalaksana Komprehensif Gizi Lebih & Obesitas Anak</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 dark:text-slate-300">
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400">🥗 1. Tatalaksana Nutrisi & Traffic Light Diet</h4>
+                        <ul class="list-disc pl-4 text-xs space-y-2">
+                            <li><b>Prinsip Kalori:</b> Kebutuhan kalori dihitung berdasarkan Berat Badan Ideal (BBI) dikalikan RDA menurut tinggi badan (<i>height-age</i>). Pengurangan kalori 200-500 kkal/hari dengan target penurunan BB 0,5 kg per minggu.</li>
+                            <li><b>Pola Makan:</b> Makan besar 3x sehari dan camilan sehat 2x sehari (diutamakan buah segar), minum air putih, durasi makan sekitar 30 menit dengan lingkungan netral (tanpa pemaksaan).</li>
+                            <li><b>Traffic Light Diet:</b> <br>
+                                • <b>Green Food:</b> Buah, sayur, daging tanpa lemak, susu rendah lemak (bebas dikonsumsi).<br>
+                                • <b>Yellow Food:</b> Roti, sereal, keju (porsi sedang).<br>
+                                • <b>Red Food:</b> Makanan digoreng, junk food, makanan manis, soda (dibatasi ketat max 1x/minggu).
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                        <h4 class="font-bold text-medical-700 dark:text-medical-400">🏃 2. Aktivitas Fisis, Modifikasi Perilaku & Farmakoterapi</h4>
+                        <ul class="list-disc pl-4 text-xs space-y-2">
+                            <li><b>Aktivitas Fisis:</b> Latihan fisis rutin setiap hari selama 60 menit yang mencakup aktivitas aerobik, penguatan otot, serta penguatan tulang (mengurangi waktu layar / <i>screen time</i>).</li>
+                            <li><b>Modifikasi Perilaku:</b> Pengawasan mandiri, kontrol rangsangan lingkungan, dan penghargaan positif (pujian).</li>
+                            <li><b>Farmakoterapi & Bedah:</b> Penggunaan obat (seperti orlistat atau metformin untuk komorbiditas resistensi insulin) atau bedah bariatrik sangat selektif dipertimbangkan pada kasus khusus remaja dengan komorbid berat yang gagal pada terapi konvensional.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. INTERACTIVE QUIZ (10 SOAL) -->
+            <section id="quiz-section" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-medical-600 font-bold text-xs uppercase tracking-wider">Exam Simulation</span>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Latihan 10 Soal Ujian Komprehensif Obesitas Anak & Remaja</h3>
+                    </div>
+                    <span id="quizScore" class="bg-medical-100 text-medical-800 dark:bg-medical-900 dark:text-medical-200 px-3 py-1 rounded-lg text-xs font-bold">Skor Total: 0 / 10</span>
+                </div>
+
+                <!-- SOAL 1 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q1">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>1.</b> Berapakah batas ambang kriteria diagnosis obesitas pada anak usia di bawah 2 tahun berdasarkan standar grafik antropometri WHO 2006?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q1" value="A" class="mr-2"> A. Indeks Massa Tubuh menurut Umur di atas persentil 85</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q1" value="B" class="mr-2"> B. Berat Badan menurut Tinggi Badan di atas +3 SD</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q1" value="C" class="mr-2"> C. Indeks Massa Tubuh menurut Umur di atas persentil 95</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q1" value="D" class="mr-2"> D. Berat Badan menurut Tinggi Badan di antara +2 hingga +3 SD</label>
+                    </div>
+                    <button onclick="checkSingle(1, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-1" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 2 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q2">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>2.</b> Manakah parameter kurva pertumbuhan yang direkomendasikan IDAI untuk mendiagnosis obesitas pada anak usia 6 tahun?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q2" value="A" class="mr-2"> A. Grafik Berat Badan menurut Umur (BB/U CDC 2000)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q2" value="B" class="mr-2"> B. Grafik Indeks Massa Tubuh menurut Umur (IMT/U CDC 2000)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q2" value="C" class="mr-2"> C. Grafik Panjang Badan menurut Umur (PB/U WHO 2006)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q2" value="D" class="mr-2"> D. Grafik Lingkar Kepala menurut Umur (Head Circumference)</label>
+                    </div>
+                    <button onclick="checkSingle(2, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-2" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 3 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q3">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>3.</b> Apakah arti klinis dari fenomena <i>early adiposity rebound</i> yang terjadi sebelum usia 5 tahun pada anak?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q3" value="A" class="mr-2"> A. Penanda tingginya risiko kejadian obesitas dan sindrom metabolik kelak</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q3" value="B" class="mr-2"> B. Indikator normal percepatan pertumbuhan linier tulang belakang</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q3" value="C" class="mr-2"> C. Manifestasi klinis awal dari defisiensi hormon pertumbuhan endogen</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q3" value="D" class="mr-2"> D. Proses pemulihan fisiologis pasca malnutrisi berat tipe marasmus</label>
+                    </div>
+                    <button onclick="checkSingle(3, 'A')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-3" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 4 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q4">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>4.</b> Manakah karakteristik klinis yang membedakan antara obesitas idiopatik (eksogen) dengan obesitas endogen pada anak?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q4" value="A" class="mr-2"> A. Obesitas endogen umumnya menunjukkan perawakan tinggi</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q4" value="B" class="mr-2"> B. Obesitas idiopatik ditandai oleh perawakan pendek</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q4" value="C" class="mr-2"> C. Obesitas idiopatik umumnya memiliki perawakan tinggi dan riwayat keluarga positif</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q4" value="D" class="mr-2"> D. Obesitas endogen selalu disertai fungsi mental normal</label>
+                    </div>
+                    <button onclick="checkSingle(4, 'C')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-4" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 5 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q5">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>5.</b> Manakah kelompok bahan makanan dalam konsep <i>traffic light diet</i> yang dikategorikan sebagai <i>Red Food</i> dan harus dibatasi ketat konsumsinya?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q5" value="A" class="mr-2"> A. Buah-buahan segar dan sayuran hijau</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q5" value="B" class="mr-2"> B. Daging segar tanpa lemak dan ikan segar</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q5" value="C" class="mr-2"> C. Kentang goreng, makanan cepat saji (junk food), dan minuman manis bersoda</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q5" value="D" class="mr-2"> D. Roti gandum utuh dan produk susu rendah lemak</label>
+                    </div>
+                    <button onclick="checkSingle(5, 'C')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-5" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 6 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q6">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>6.</b> Bagaimana formula dasar penentuan kebutuhan kalori harian pada tatalaksana nutrisi anak dengan obesitas?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q6" value="A" class="mr-2"> A. Berat badan aktual dikalikan RDA menurut tinggi badan</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q6" value="B" class="mr-2"> B. Berat badan ideal dikalikan RDA menurut tinggi badan (height-age)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q6" value="C" class="mr-2"> C. Tinggi badan kuadrat dikalikan konstanta aktivitas fisik</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q6" value="D" class="mr-2"> D. Standar kalori mutlak 1000 kkal untuk semua anak obesitas</label>
+                    </div>
+                    <button onclick="checkSingle(6, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-6" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 7 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q7">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>7.</b> Manakah manifestasi klinis respirasi yang paling sering menyertai anak dengan obesitas berat akibat hipertrofi tonsil?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q7" value="A" class="mr-2"> A. Asma bronkial alergika persisten</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q7" value="B" class="mr-2"> B. Obstructive Sleep Apnea (OSA)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q7" value="C" class="mr-2"> C. Efusi pleura bilateral masif</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q7" value="D" class="mr-2"> D. Pneumonia lobaris akut rekurren</label>
+                    </div>
+                    <button onclick="checkSingle(7, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-7" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 8 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q8">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>8.</b> Tanda kulit khas berupa penebalan dan warna kehitaman seperti velvet di area leher dan lipatan ketiak pada anak obesitas menandakan adanya kondisi apa?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q8" value="A" class="mr-2"> A. Infeksi jamur superfisial dermatofitosis kronis</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q8" value="B" class="mr-2"> B. Akantosis nigrikans akibat resistensi insulin</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q8" value="C" class="mr-2"> C. Dermatitis kontak alergika bahan pakaian</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q8" value="D" class="mr-2"> D. Hiperpigmentasi pasca inflamasi idiopatik</label>
+                    </div>
+                    <button onclick="checkSingle(8, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-8" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 9 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q9">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>9.</b> Berapakah durasi minimal rekomendasi aktivitas fisis harian yang harus diterapkan pada anak dan remaja dalam program tatalaksana obesitas?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q9" value="A" class="mr-2"> A. Selama 15 menit setiap 3 hari sekali</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q9" value="B" class="mr-2"> B. Selama 30 menit sebanyak 3 kali seminggu</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q9" value="C" class="mr-2"> C. Selama 60 menit setiap hari secara rutin</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q9" value="D" class="mr-2"> D. Selama 120 menit hanya pada akhir pekan</label>
+                    </div>
+                    <button onclick="checkSingle(9, 'C')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-9" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 10 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q10">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>10.</b> Kelainan ortopedi manakah yang sering dikaitkan dengan beban mekanik berlebih pada lempeng epifisis panggul anak obesitas?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q10" value="A" class="mr-2"> A. Slipped Capital Femoral Epiphysis (SCFE)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q10" value="B" class="mr-2"> B. Nekrosis aseptik caput femoris (Legg-Calve-Perthes)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q10" value="C" class="mr-2"> C. Dislokasi kongenital panggul bilateral</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q10" value="D" class="mr-2"> D. Artritis reumatoid juvenilis sistemik</label>
+                    </div>
+                    <button onclick="checkSingle(10, 'A')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-10" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+            </section>
+
+            <!-- 9. QUICK REVIEW -->
+            <section id="quick-review" class="bg-gradient-to-br from-medical-600 to-medical-800 text-white p-6 md:p-8 rounded-2xl shadow-lg space-y-4">
+                <h3 class="text-xl font-bold flex items-center gap-2">If You Only Have 5 Minutes (Quick Review)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm space-y-1">
+                        <span class="font-bold block text-medical-200">Kriteria Obesitas IDAI</span>
+                        <p>&lt; 2 tahun: BB/TB > +3 SD (WHO 2006). > 2 tahun: IMT > P95 (CDC 2000).</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm space-y-1">
+                        <span class="font-bold block text-medical-200">Idiopatik vs Endogen</span>
+                        <p>Idiopatik (>90%): perawakan tinggi, riwayat keluarga (+). Endogen (<10%): perawakan pendek, retardasi mental.</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm space-y-1">
+                        <span class="font-bold block text-medical-200">Komorbiditas Utama</span>
+                        <p>OSA (mengorok), NAFLD (hati), T2DM (akantosis nigrikans), Hipertensi, SCFE / Blount.</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm space-y-1">
+                        <span class="font-bold block text-medical-200">Prinsip Tatalaksana</span>
+                        <p>Kalori berdasarkan BBI x RDA tinggi-usia. Traffic Light Diet, aktivitas fisis 60 menit/hari.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-4 py-8 text-center text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 mt-12">
+        Interactive Medical Study Companion • Blok Endokrin & Metabolik • FK UMS • Offline Ready
+    </footer>
+
+    <!-- JavaScript Interactivity -->
+    <script>
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const themeToggle = document.getElementById('themeToggle');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeToggle.innerText = 'Mode Terang';
+            } else {
+                html.classList.add('dark');
+                themeToggle.innerText = 'Mode Gelap';
+            }
+        }
+
+        let totalScore = 0;
+        const answeredState = {};
+
+        function checkSingle(qNum, correctOpt) {
+            const radios = document.getElementsByName('q' + qNum);
+            let userVal = '';
+            for (const r of radios) {
+                if (r.checked) userVal = r.value;
+            }
+
+            const feedback = document.getElementById('feedback-' + qNum);
+            feedback.classList.remove('hidden');
+
+            if (!userVal) {
+                feedback.className = "mt-3 p-4 rounded-lg text-xs bg-amber-50 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200";
+                feedback.innerHTML = "Silakan pilih salah satu opsi jawaban terlebih dahulu.";
+                return;
+            }
+
+            if (!answeredState[qNum]) {
+                answeredState[qNum] = true;
+                if (userVal === correctOpt) {
+                    totalScore++;
+                    feedback.className = "mt-3 p-4 rounded-lg text-xs bg-emerald-50 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200 border border-emerald-200";
+                    feedback.innerHTML = "<b>BENAR!</b><br>Jawaban Anda sudah tepat dan sesuai dengan rekomendasi IDAI.";
+                } else {
+                    feedback.className = "mt-3 p-4 rounded-lg text-xs bg-rose-50 text-rose-800 dark:bg-rose-900/40 dark:text-rose-200 border border-rose-200";
+                    feedback.innerHTML = "<b>KURANG TEPAT.</b> Jawaban yang benar adalah opsi <b>" + correctOpt + "</b>.";
+                }
+                document.getElementById('quizScore').innerText = "Skor Total: " + totalScore + " / 10";
+            }
+        }
+
+        window.addEventListener('scroll', function() {
+            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+            document.getElementById('progressText').innerText = Math.round(scrolled) + '%';
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const sections = document.querySelectorAll('.searchable-content > section');
+            sections.forEach(function(sec) {
+                const text = sec.innerText.toLowerCase();
+                if (text.includes(term) || term === '') {
+                    sec.style.display = '';
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
